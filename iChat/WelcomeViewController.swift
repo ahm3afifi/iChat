@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 class WelcomeViewController: UIViewController {
 
@@ -23,14 +24,40 @@ class WelcomeViewController: UIViewController {
     //MARK: IBActions
     
     @IBAction func loginButtonPressed(_ sender: Any) {
+        
         dismissKeyboard()
+        
+        if emailTextField.text != "" && passwordTextField.text != "" {
+            loginUser()
+        } else {
+            ProgressHUD.showError("email and password is missing!")
+        }
+        
         print("Login Pressed")
     }
     
     @IBAction func registerButtonPressed(_ sender: Any) {
+        
         dismissKeyboard()
+        
+        if emailTextField.text != "" && passwordTextField.text != "" && repeatPasswordTextField.text != "" {
+            
+            if passwordTextField.text == repeatPasswordTextField.text {
+                registerUser()
+            } else {
+                ProgressHUD.showError("passwords don't match")
+            }
+            
+        } else {
+            
+            ProgressHUD.showError("all fields are required!")
+            
+        }
+        
         print("Register Pressed")
     }
+    
+    
     
     // Tap Gesture Recognizer function to dismiss the keyboard
     @IBAction func backgroundTap(_ sender: Any) {
@@ -40,6 +67,25 @@ class WelcomeViewController: UIViewController {
     
     //MARK: Helper Functions
     
+    
+    func loginUser() {
+        
+        ProgressHUD.show("Login....")
+        
+        FUser.loginUserWith(email: emailTextField.text!, password: passwordTextField.text!) { (error) in
+            if error != nil {
+                ProgressHUD.showError(error!.localizedDescription)
+                return
+            }
+            
+            self.goToApp()
+        }
+    }
+    
+    func registerUser() {
+        
+    }
+    
     func dismissKeyboard() {
         self.view.endEditing(false)
     }
@@ -48,6 +94,20 @@ class WelcomeViewController: UIViewController {
         emailTextField.text = ""
         passwordTextField.text = ""
         repeatPasswordTextField.text = ""
+    }
+    
+    
+    //MARK: GoToApp
+    
+    func goToApp() {
+        
+        ProgressHUD.dismiss()
+        cleanTextFields()
+        dismissKeyboard()
+        
+        print("show the app!")
+        //present the app here
+        
     }
     
     
