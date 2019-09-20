@@ -54,7 +54,6 @@ class WelcomeViewController: UIViewController {
             
         }
         
-        print("Register Pressed")
     }
     
     
@@ -67,23 +66,21 @@ class WelcomeViewController: UIViewController {
     
     //MARK: Helper Functions
     
-    
     func loginUser() {
-        
         ProgressHUD.show("Login....")
-        
         FUser.loginUserWith(email: emailTextField.text!, password: passwordTextField.text!) { (error) in
             if error != nil {
                 ProgressHUD.showError(error!.localizedDescription)
                 return
             }
-            
             self.goToApp()
         }
     }
     
     func registerUser() {
-        
+        performSegue(withIdentifier: "welcomeToFinishReg", sender: self)
+        cleanTextFields()
+        dismissKeyboard()
     }
     
     func dismissKeyboard() {
@@ -100,15 +97,26 @@ class WelcomeViewController: UIViewController {
     //MARK: GoToApp
     
     func goToApp() {
-        
         ProgressHUD.dismiss()
         cleanTextFields()
         dismissKeyboard()
         
         print("show the app!")
         //present the app here
-        
     }
     
+    
+    //MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "welcomeToFinishReg" {
+            let vc = segue.destination as! FinishRegistrationViewController
+            
+            // to copy email and password from welcomeVC to FinishRegistrationVC
+            vc.email = emailTextField.text!
+            vc.password = passwordTextField.text!
+        }
+    }
     
 }
