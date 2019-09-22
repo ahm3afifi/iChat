@@ -97,7 +97,7 @@ class FinishRegistrationViewController: UIViewController {
     }
     
     
-    func finishRegiteration(withValues: [String: Any]) {
+    func finishRegisteration(withValues: [String: Any]) {
         
         updateCurrentUserInFirestore(withValues: withValues) { (error) in
             
